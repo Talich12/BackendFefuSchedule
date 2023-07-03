@@ -10,7 +10,7 @@ import os
   
 
 class Work_plan(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     discipline_id = db.Column(db.Integer, db.ForeignKey('discipline.id'), nullable=False)
     discipline = db.relationship("Discipline", backref="work_plan")
     subgroup_id = db.Column(db.Integer, db.ForeignKey('subgroup.id'), nullable=False)
@@ -18,7 +18,7 @@ class Work_plan(db.Model):
 
 
 class Schedule(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     auditorium_number = db.Column(db.Integer, db.ForeignKey('auditorium.number'), nullable=False)
     auditorium = db.relationship("Auditorium", backref="shedule")
     pair_number_id = db.Column(db.Integer, db.ForeignKey('pair_number.id'), nullable=False)
@@ -31,20 +31,20 @@ class Schedule(db.Model):
 
 
 class Auditorium(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     number = db.Column(db.String(), unique=True, nullable=False)
     type = db.Column(db.String(), nullable=False)
     number_of_seats = db.Column(db.Integer, nullable=False)
 
 
 class Pair_number(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     start = db.Column(db.String(), nullable=False)
     end = db.Column(db.String(), nullable=False)
 
 
 class Teacher(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(), nullable=False)
     sername = db.Column(db.String(), nullable=False)
     lastname = db.Column(db.String(), nullable=False)
@@ -52,26 +52,26 @@ class Teacher(db.Model):
 
 
 class Teacher_preference(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     preference = db.Column(db.String(), nullable=False)
     teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id'), nullable=False)
     teacher = db.relationship("Teacher", backref="preference")
 
 class Teacher_discipline(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id'), nullable=False)
     teacher = db.relationship("Teacher", backref="teacher_discipline")
     discipline_id = db.Column(db.Integer, db.ForeignKey('discipline.id'), nullable=False)
     discipline = db.relationship("Discipline", backref="teacher_discipline")
 
 class Discipline(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(), nullable=False)
     reporting_form = db.Column(db.String(), nullable=False)
 
 
 class Subgroup(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     number = db.Column(db.String(), nullable=False)
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'), nullable=False)
     group = db.relationship("Group", backref="subgroup")
@@ -79,7 +79,7 @@ class Subgroup(db.Model):
 
 
 class Group(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(), nullable=False)
     flow_id = db.Column(db.Integer, db.ForeignKey('flow.id'), nullable=False)
     flow = db.relationship("Flow", backref="group")
@@ -87,7 +87,7 @@ class Group(db.Model):
 
 
 class Flow(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     code = db.Column(db.String(), nullable=False)
     size = db.Column(db.Integer, default=0, nullable=True)
 
