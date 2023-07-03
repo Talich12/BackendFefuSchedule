@@ -96,7 +96,7 @@ class DisciplineSchema(ma.SQLAlchemySchema):
         model = Discipline
         load_instance = True
 
-    id = auto_field()
+    id = auto_field(required=True)
     name = auto_field()
     reporting_form = auto_field()
 
@@ -113,7 +113,7 @@ class AuditoriumSchema(ma.SQLAlchemySchema):
         model = Auditorium
         load_instance = True
     
-    number = auto_field()
+    number = auto_field(required=True)
     type = auto_field()
     number_of_seats = auto_field()
 
@@ -122,7 +122,7 @@ class Pair_numberSchema(ma.SQLAlchemySchema):
         model = Pair_number
         load_instance = True
     
-    id = auto_field()
+    id = auto_field(required=True)
     start = auto_field()
     end = auto_field()
 
@@ -139,7 +139,7 @@ class FlowSchema(ma.SQLAlchemySchema):
         model = Flow
         load_instance = True
 
-    id = auto_field()
+    id = auto_field(required=True)
     code = auto_field()
     size = auto_field()
     
@@ -156,7 +156,7 @@ class GroupSchema(ma.SQLAlchemySchema):
         model = Group
         load_instance = True
 
-    id = auto_field()
+    id = auto_field(required=True)
     name = auto_field()
     size = auto_field()  
     flow_id = auto_field()
@@ -179,7 +179,7 @@ class SubgroupSchema(ma.SQLAlchemySchema):
         model = Subgroup
         load_instance = True
 
-    id = auto_field()
+    id = auto_field(required=True)
     number = auto_field()
     size = auto_field()  
     group_id = auto_field()
@@ -202,7 +202,7 @@ class TeacherSchema(ma.SQLAlchemySchema):
         model = Teacher
         load_instance = True
 
-    id = auto_field()
+    id = auto_field(required=True)
     name = auto_field()
     sername = auto_field()
     lastname = auto_field()
@@ -223,7 +223,7 @@ class Teacher_preferenceSchema(ma.SQLAlchemySchema):
         model = Teacher_preference
         load_instance = True
 
-    id = auto_field()
+    id = auto_field(required=True)
     preference = auto_field()
     teacher_id = auto_field()
 
@@ -244,7 +244,7 @@ class Teacher_disciplineSchema(ma.SQLAlchemySchema):
         model = Teacher_discipline
         load_instance = True
 
-    id = auto_field()
+    id = auto_field(required=True)
     discipline_id = auto_field()
     teacher_id = auto_field()
 
