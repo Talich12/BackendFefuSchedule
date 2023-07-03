@@ -1,10 +1,8 @@
 from app import app, db, spec
 from flask import jsonify, request
 from marshmallow import Schema, fields
-from app.models import Teacher, TeacherSchema, PostTeacherSchema, SuccessSchema
+from app.models import Teacher, TeacherSchema, PostTeacherSchema, SuccessSchema, IDParameter
 
-class TeacherParameter(Schema):
-    id = fields.Int()
 
 @app.route('/teachers', methods=['GET'])
 def get_teahers():
@@ -76,7 +74,7 @@ def get_cur_teacher(id):
       description: Get teacher by id
       parameters:
       - in: path
-        schema: TeacherParameter
+        schema: IDParameter
       responses:
         200:
           description: Return teacher
@@ -104,7 +102,7 @@ def edit_cur_teacher(id):
       description: Create a teacher
       parameters:
       - in: path
-        schema: TeacherParameter
+        schema: IDParameter
       requestBody:
         description: Request data for teacher
         required: true
@@ -148,7 +146,7 @@ def delete_cur_teacher(id):
       description: Get teacher by id
       parameters:
       - in: path
-        schema: TeacherParameter
+        schema: IDParameter
       responses:
         200:
           description: Return teacher

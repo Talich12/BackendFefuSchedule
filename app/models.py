@@ -264,3 +264,6 @@ class PostTeacher_disciplineSchema(ma.SQLAlchemySchema):
 
 class SuccessSchema(Schema):
     message = fields.Str(default='Success')
+
+class IDParameter(Schema):
+    id = fields.Int()
