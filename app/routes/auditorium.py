@@ -16,7 +16,7 @@ def get_auditoriums():
             application/json:
               schema: AuditoriumSchema
       tags:
-        - Teacher
+        - Auditorium
     """
     auditorium_schema = AuditoriumSchema(many = True)
     req = Auditorium.query.all()
@@ -48,7 +48,7 @@ def post_auditoriums():
             application/json:
               schema: SuccessSchema
       tags:
-        - Teacher
+        - Auditorium
     """
     data = request.get_json(silent=True)
     number = data['number']
@@ -80,7 +80,7 @@ def get_cur_auditorium(id):
             application/json:
               schema: AuditoriumSchema
       tags:
-        - Teacher
+        - Auditorium
     """
     auditorium_schema = AuditoriumSchema(many = False)
 
@@ -116,7 +116,7 @@ def edit_cur_auditorium(id):
             application/json:
               schema: SuccessSchema
       tags:
-        - Teacher
+        - Auditorium
     """
     data = request.get_json(silent=True)
     number = data['number']
@@ -150,7 +150,7 @@ def delete_cur_auditorium(id):
             application/json:
               schema: SuccessSchema
       tags:
-        - Teacher
+        - Auditorium
     """
     auditorium = Auditorium.query.filter_by(id = id).first()
     db.session.delete(auditorium)
