@@ -15,7 +15,9 @@ def get_teahers():
           description: Return all teachers
           content:
             application/json:
-              schema: TeacherSchema
+              schema: 
+                type: array
+                items: TeacherSchema
       tags:
         - Teacher
     """

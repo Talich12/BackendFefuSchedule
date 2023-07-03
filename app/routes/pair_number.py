@@ -14,7 +14,9 @@ def get_pair_numbers():
           description: Return all discipline
           content:
             application/json:
-              schema: Pair_numberSchema
+              schema: 
+                type: array
+                items: Pair_numberSchema
       tags:
         - Discipline
     """

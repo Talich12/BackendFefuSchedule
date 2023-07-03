@@ -14,7 +14,9 @@ def get_auditoriums():
           description: Return all auditoriums
           content:
             application/json:
-              schema: AuditoriumSchema
+              schema: 
+                type: array
+                items: AuditoriumSchema
       tags:
         - Auditorium
     """

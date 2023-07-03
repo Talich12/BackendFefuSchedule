@@ -147,7 +147,7 @@ def delete_cur_discipline(id):
             application/json:
               schema: SuccessSchema
       tags:
-        - Discipline
+        - Auditorium
     """
     discipline = Discipline.query.filter_by(id = id).first()
     db.session.delete(discipline)
