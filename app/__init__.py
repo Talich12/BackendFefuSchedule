@@ -36,4 +36,4 @@ api_key_scheme = {"type": "apiKey", "in": "header", "name": "X-API-Key"}
 spec.components.security_scheme("ApiKeyAuth", api_key_scheme)
 
 from app import models
-from app.routes import routes, teacher, auditorium, discipline, pair_number
+from app.routes import routes, teacher, auditorium, discipline, pair_number, flow
