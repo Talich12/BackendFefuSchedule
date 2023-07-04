@@ -15,6 +15,7 @@ class Work_plan(db.Model):
     discipline = db.relationship("Discipline", backref="work_plan")
     subgroup_id = db.Column(db.Integer, db.ForeignKey('subgroup.id'), nullable=False)
     subgroup = db.relationship("Subgroup", backref="work_plan")
+    hour_count = db.Column(db.Integer, nullable=False)
 
 
 class Schedule(db.Model):
