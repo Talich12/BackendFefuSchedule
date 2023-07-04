@@ -84,7 +84,7 @@ class Group(db.Model):
     name = db.Column(db.String(), nullable=False)
     flow_id = db.Column(db.Integer, db.ForeignKey('flow.id'), nullable=False)
     flow = db.relationship("Flow", backref="group")
-    size = db.Column(db.Integer, nullable=False)
+    size = db.Column(db.Integer, default=0, nullable=True)
 
 
 class Flow(db.Model):
@@ -161,7 +161,6 @@ class PostFlowSchema(ma.SQLAlchemySchema):
         load_instance = True
 
     code = auto_field()
-    size = auto_field()
 
 class GroupSchema(ma.SQLAlchemySchema):
     class Meta:
@@ -180,8 +179,7 @@ class PostGroupSchema(ma.SQLAlchemySchema):
         model = Group
         load_instance = True
 
-    name = auto_field()
-    size = auto_field()  
+    name = auto_field() 
     flow_id = auto_field()
 
     flow = fields.Nested(FlowSchema)  

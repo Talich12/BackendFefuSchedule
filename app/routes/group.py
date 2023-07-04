@@ -1,7 +1,7 @@
 from app import app, db, spec
 from flask import jsonify, request
 from marshmallow import Schema, fields
-from app.models import Flow, Group, GroupSchema, PostGroupSchema, SuccessSchema, IDParameter
+from app.models import Flow, Group, Subgroup, GroupSchema, PostGroupSchema, SuccessSchema, IDParameter
 
 @app.route('/groups', methods=['GET'])
 def get_pair_groups():
@@ -54,13 +54,9 @@ def post_pair_groups():
     """
     data = request.get_json(silent=True)
     name = data['name']
-    size = data['size']
     flow_id = data['flow_id']
 
-    find_flow = Flow.query.filter_by(id = flow_id).first()
-    find_flow.size += size
-
-    group = Group(name = name, size = size, flow_id = flow_id)
+    group = Group(name = name, flow_id = flow_id)
     db.session.add(group)
     db.session.commit()
 
@@ -125,27 +121,12 @@ def edit_cur_group(id):
     """
     data = request.get_json(silent=True)
     name = data['name']
-    size = data['size']
     flow_id = data['flow_id']
 
-    changed = False
 
     group = Group.query.filter_by(id = id).first()
 
-    if flow_id != group.flow_id:
-        old_flow = Flow.query.filter_by(id = group.flow_id).first()
-        old_flow.size -= group.size
-        changed = True
-
-    if changed:
-        new_flow = Flow.query.filter_by(id = flow_id).first()
-        new_flow.size += size
-    else:
-        new_flow = Flow.query.filter_by(id = flow_id).first()
-        new_flow.size += size - group.size
-
     group.name = name
-    group.size = size
     group.flow_id = flow_id
     db.session.commit()
 
@@ -173,6 +154,10 @@ def delete_cur_group(id):
         - Discipline
     """
     group = Group.query.filter_by(id = id).first()
+
+    find_subgroups = Subgroup.query.filter_by(group_id = id).all()
+    for subgroup in find_subgroups:
+        db.session.delete(subgroup)
 
     find_flow = Flow.query.filter_by(id = group.flow_id).first()
     find_flow.size -= group.size

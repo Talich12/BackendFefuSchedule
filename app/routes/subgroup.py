@@ -1,7 +1,7 @@
 from app import app, db, spec
 from flask import jsonify, request
 from marshmallow import Schema, fields
-from app.models import Subgroup, SubgroupSchema, PostSubgroupSchema, SuccessSchema, IDParameter
+from app.models import Flow, Group, Subgroup, SubgroupSchema, PostSubgroupSchema, SuccessSchema, IDParameter
 
 @app.route('/subgroups', methods=['GET'])
 def get_pair_subgroups():
@@ -56,6 +56,12 @@ def post_pair_subgroups():
     number = data['number']
     size = data['size']
     group_id = data['group_id']
+
+    find_group = Group.query.filter_by(id = group_id).first()
+    find_group.size += size
+
+    find_flow = Flow.query.filter_by(id = find_group.flow_id).first()
+    find_flow.size += size
 
     subgroup = Subgroup(number = number, size = size, group_id = group_id)
     db.session.add(subgroup)
@@ -125,7 +131,30 @@ def edit_cur_subgroup(id):
     size = data['size']
     group_id = data['group_id']
 
+    changed = False
+
+
+
     subgroup = Subgroup.query.filter_by(id = id).first()
+
+    if group_id != subgroup.group_id:
+        old_group = Group.query.filter_by(id = subgroup.group_id).first()
+        old_group.size -= subgroup.size
+        old_flow = Flow.query.filter_by(id = old_group.flow_id).first()
+        old_flow.size -= subgroup.size
+        changed = True
+
+    if changed:
+        new_group = Group.query.filter_by(id = group_id).first()
+        new_group.size += size
+        new_flow = Flow.query.filter_by(id = new_group.flow_id).first()
+        new_flow.size += size
+    else:
+        new_group = Group.query.filter_by(id = group_id).first()
+        new_group.size += size - subgroup.size
+        new_flow = Flow.query.filter_by(id = new_group.flow_id).first()
+        new_flow.size += size - subgroup.size
+    
     subgroup.number = number
     subgroup.size = size
     subgroup.group_id = group_id

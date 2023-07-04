@@ -1,7 +1,7 @@
 from app import app, db, spec
 from flask import jsonify, request
 from marshmallow import Schema, fields
-from app.models import Flow, FlowSchema, PostFlowSchema, SuccessSchema, IDParameter
+from app.models import Flow, Group, Subgroup, FlowSchema, PostFlowSchema, SuccessSchema, IDParameter
 
 @app.route('/flows', methods=['GET'])
 def get_pair_flows():
@@ -149,6 +149,15 @@ def delete_cur_flow(id):
         - Discipline
     """
     flow = Flow.query.filter_by(id = id).first()
+
+    find_groups = Group.query.filter_by(flow_id = id).all()
+
+    for group in find_groups:
+        find_subgroups = Subgroup.query.filter_by(group_id = group.id).all()
+        for subgroup in find_subgroups:
+            db.session.delete(subgroup)
+        db.session.delete(group) 
+
     db.session.delete(flow)
     db.session.commit()
     return {"message": "Success"}
