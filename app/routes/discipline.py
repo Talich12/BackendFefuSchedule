@@ -14,7 +14,9 @@ def get_disciplines():
           description: Return all discipline
           content:
             application/json:
-              schema: DisciplineSchema
+              schema: 
+                type: array
+                items: DisciplineSchema
       tags:
         - Discipline
     """
