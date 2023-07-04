@@ -1,7 +1,7 @@
 from app import app, db, spec
 from flask import jsonify, request
 from marshmallow import Schema, fields
-from app.models import Discipline, DisciplineSchema, PostDisciplineSchema, SuccessSchema, IDParameter
+from app.models import Discipline, DisciplineSchema, CurrentDisciplineSchema, PostDisciplineSchema, Teacher_discipline, CurrentTeacherDisciplineSchema, SuccessSchema, IDParameter
 
 @app.route('/disciplines', methods=['GET'])
 def get_disciplines():
@@ -79,14 +79,19 @@ def get_cur_discipline(id):
           description: Return discipline
           content:
             application/json:
-              schema: DisciplineSchema
+              schema: CurrentDisciplineSchema
       tags:
         - Discipline
     """
-    discipline_schema = DisciplineSchema(many = False)
+    discipline_schema = CurrentDisciplineSchema(many = False)
+    teacher_discipline_schema = CurrentTeacherDisciplineSchema(many = True)
+
+    teachers = Teacher_discipline.query.filter_by(discipline_id = id).all()
+    teachers = teacher_discipline_schema.dump(teachers)
 
     req = Discipline.query.filter_by(id = id).first()
     output = discipline_schema.dump(req)
+    output['teachers_array'] = teachers
     return jsonify(output)
 
 with app.test_request_context():

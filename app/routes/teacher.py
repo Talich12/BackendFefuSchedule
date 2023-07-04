@@ -1,7 +1,7 @@
 from app import app, db, spec
 from flask import jsonify, request
 from marshmallow import Schema, fields
-from app.models import Teacher, TeacherSchema, PostTeacherSchema, SuccessSchema, IDParameter
+from app.models import Teacher, TeacherSchema, PostTeacherSchema, CurrentTeacherSchema, PreferenceSchema, Teacher_preference, Teacher_discipline, CurrentDisciplineTeacherSchema,  SuccessSchema, IDParameter
 
 
 @app.route('/teachers', methods=['GET'])
@@ -82,14 +82,24 @@ def get_cur_teacher(id):
           description: Return teacher
           content:
             application/json:
-              schema: TeacherSchema
+              schema: CurrentTeacherSchema
       tags:
         - Teacher
     """
-    teacher_shema = TeacherSchema(many = False)
+    teacher_schema = CurrentTeacherSchema(many = False)
+    preference_schema = PreferenceSchema(many = True)
+    discipline_scheam = CurrentDisciplineTeacherSchema(many=True)
+
+    preference = Teacher_preference.query.filter_by(teacher_id = id).all()
+    preference = preference_schema.dump(preference)
+
+    discipline = Teacher_discipline.query.filter_by(teacher_id = id).all()
+    discipline = discipline_scheam.dump(discipline)
 
     req = Teacher.query.filter_by(id = id).first()
-    output = teacher_shema.dump(req)
+    output = teacher_schema.dump(req)
+    output['preference_array'] = preference
+    output['discipline_array'] = discipline
     return jsonify(output)
 
 with app.test_request_context():

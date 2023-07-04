@@ -100,6 +100,17 @@ class DisciplineSchema(ma.SQLAlchemySchema):
     name = auto_field()
     reporting_form = auto_field()
 
+class CurrentDisciplineSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Discipline
+        load_instance = True
+
+    id = auto_field(required=True)
+    name = auto_field()
+    reporting_form = auto_field()
+
+    teachers_array = fields.List(fields.Nested(lambda: CurrentTeacherDisciplineSchema()))
+
 class PostDisciplineSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Discipline
@@ -208,6 +219,20 @@ class TeacherSchema(ma.SQLAlchemySchema):
     lastname = auto_field()
     position = auto_field()
 
+class CurrentTeacherSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Teacher
+        load_instance = True
+
+    id = auto_field(required=True)
+    name = auto_field()
+    sername = auto_field()
+    lastname = auto_field()
+    position = auto_field()
+
+    discioline_schema =  fields.List(fields.Nested(lambda: DisciplineSchema()))
+    preference_array = fields.List(fields.Nested(lambda: PreferenceSchema()))
+
 class PostTeacherSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Teacher
@@ -229,6 +254,14 @@ class Teacher_preferenceSchema(ma.SQLAlchemySchema):
 
     teacher = fields.Nested(TeacherSchema)
 
+class PreferenceSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Teacher_preference
+        load_instance = True
+
+    id = auto_field()
+    preference = auto_field()
+
 class PostTeacher_preferenceSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Teacher_preference
@@ -249,6 +282,22 @@ class Teacher_disciplineSchema(ma.SQLAlchemySchema):
     teacher_id = auto_field()
 
     discipline = fields.Nested(DisciplineSchema)
+    teacher = fields.Nested(TeacherSchema)
+
+class CurrentDisciplineTeacherSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Teacher_discipline
+        load_instance = True
+
+    id = auto_field(required=True)
+    discipline = fields.Nested(DisciplineSchema)
+
+class CurrentTeacherDisciplineSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Teacher_discipline
+        load_instance = True
+
+    id = auto_field(required=True)
     teacher = fields.Nested(TeacherSchema)
 
 class PostTeacher_disciplineSchema(ma.SQLAlchemySchema):
