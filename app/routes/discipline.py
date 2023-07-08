@@ -2,7 +2,7 @@ from app import app, db, spec
 from flask import jsonify, request
 from marshmallow import Schema, fields
 from app.models import Discipline, DisciplineSchema, CurrentDisciplineSchema, PostDisciplineSchema,\
-    Teacher_discipline, CurrentTeacherDisciplineSchema, SuccessSchema, IDParameter, Teacher_discipline
+    Teacher_discipline, CurrentTeacherDisciplineSchema, SuccessSchema, IDParameter
 
 @app.route('/disciplines', methods=['GET'])
 def get_disciplines():

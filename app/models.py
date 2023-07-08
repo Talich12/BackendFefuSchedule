@@ -313,7 +313,18 @@ class CurrentDisciplineTeacherSchema(ma.SQLAlchemySchema):
         model = Teacher_discipline
         load_instance = True
 
-    discipline = fields.Nested(DisciplineSchema)
+    id = fields.Method('get_id')
+    name = fields.Method('get_name')
+    reporting_form = fields.Method('get_report')
+
+    def get_id(self, obj):
+        return obj.discipline.id
+    
+    def get_name(self, obj):
+        return obj.discipline.name
+
+    def get_report(self, obj):
+        return obj.discipline.reporting_form
 
 class CurrentTeacherDisciplineSchema(ma.SQLAlchemySchema):
     class Meta:
