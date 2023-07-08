@@ -313,7 +313,6 @@ class CurrentDisciplineTeacherSchema(ma.SQLAlchemySchema):
         model = Teacher_discipline
         load_instance = True
 
-    id = auto_field(required=True)
     discipline = fields.Nested(DisciplineSchema)
 
 class CurrentTeacherDisciplineSchema(ma.SQLAlchemySchema):
@@ -321,7 +320,6 @@ class CurrentTeacherDisciplineSchema(ma.SQLAlchemySchema):
         model = Teacher_discipline
         load_instance = True
 
-    id = auto_field(required=True)
     teacher = fields.Nested(TeacherSchema)
 
 class PostTeacher_disciplineSchema(ma.SQLAlchemySchema):
