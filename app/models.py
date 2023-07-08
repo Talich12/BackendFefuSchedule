@@ -332,9 +332,6 @@ class PostTeacher_disciplineSchema(ma.SQLAlchemySchema):
     discipline_id = auto_field()
     teacher_id = auto_field()
 
-    discipline = fields.Nested(DisciplineSchema)
-    teacher = fields.Nested(TeacherSchema)
-
 class SuccessSchema(Schema):
     message = fields.Str(default='Success')
 
