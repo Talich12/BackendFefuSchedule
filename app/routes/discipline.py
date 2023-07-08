@@ -91,7 +91,7 @@ def get_cur_discipline(id):
 
     req = Discipline.query.filter_by(id = id).first()
     output = discipline_schema.dump(req)
-    output['teachers_array'] = teachers
+    output['teachers'] = teachers
     return jsonify(output)
 
 with app.test_request_context():

@@ -97,8 +97,8 @@ def get_cur_teacher(id):
 
     req = Teacher.query.filter_by(id = id).first()
     output = teacher_schema.dump(req)
-    output['preference_array'] = preference
-    output['discipline_array'] = discipline
+    output['preferences'] = preference
+    output['disciplines'] = discipline
     return jsonify(output)
 
 with app.test_request_context():

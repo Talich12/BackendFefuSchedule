@@ -146,6 +146,17 @@ class PostPair_numberSchema(ma.SQLAlchemySchema):
     start = auto_field()
     end = auto_field()
 
+class CurrentFlowSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Flow
+        load_instance = True
+
+    id = auto_field(required=True)
+    code = auto_field()
+    size = auto_field()
+
+    groups = fields.List(fields.Nested(lambda: GroupSchema()))
+
 class FlowSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Flow
@@ -161,6 +172,20 @@ class PostFlowSchema(ma.SQLAlchemySchema):
         load_instance = True
 
     code = auto_field()
+
+class CurrentGroupSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Group
+        load_instance = True
+
+    id = auto_field(required=True)
+    name = auto_field()
+    size = auto_field()  
+    flow_id = auto_field()
+
+    flow = fields.Nested(FlowSchema)
+
+    subgroups =  fields.List(fields.Nested(lambda: SubgroupSchema()))
 
 class GroupSchema(ma.SQLAlchemySchema):
     class Meta:

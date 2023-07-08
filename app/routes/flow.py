@@ -1,7 +1,7 @@
 from app import app, db, spec
 from flask import jsonify, request
 from marshmallow import Schema, fields
-from app.models import Flow, Group, Subgroup, FlowSchema, PostFlowSchema, SuccessSchema, IDParameter
+from app.models import Flow, Group, Subgroup, FlowSchema, PostFlowSchema, SuccessSchema, IDParameter, GroupSchema
 
 @app.route('/flows', methods=['GET'])
 def get_pair_flows():
@@ -83,9 +83,15 @@ def get_cur_flow(id):
         - Discipline
     """
     flow_schema = FlowSchema(many = False)
+    group_schema = GroupSchema(many = True)
 
     req = Flow.query.filter_by(id = id).first()
+
+    find_groups = Group.query.filter_by(flow_id = id).all()
+    find_groups = group_schema.dump(find_groups)
+
     output = flow_schema.dump(req)
+    output['groups'] = find_groups
     return jsonify(output)
 
 with app.test_request_context():
