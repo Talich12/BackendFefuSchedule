@@ -168,6 +168,13 @@ def delete_cur_teacher(id):
         - Teacher
     """
     teacher = Teacher.query.filter_by(id = id).first()
+    find_teacher_disciplines = Teacher_discipline.query.filter_by(teacher_id = id).all()
+    for item in find_teacher_disciplines:
+      db.session.delete(item)
+
+    find_teacher_preferences = Teacher_preference.query.filter_by(teacher_id = id).all()
+    for item in find_teacher_preferences:
+      db.session.delete(item)
     db.session.delete(teacher)
     db.session.commit()
     return {"message": "Success"}

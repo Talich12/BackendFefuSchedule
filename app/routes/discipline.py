@@ -1,7 +1,8 @@
 from app import app, db, spec
 from flask import jsonify, request
 from marshmallow import Schema, fields
-from app.models import Discipline, DisciplineSchema, CurrentDisciplineSchema, PostDisciplineSchema, Teacher_discipline, CurrentTeacherDisciplineSchema, SuccessSchema, IDParameter
+from app.models import Discipline, DisciplineSchema, CurrentDisciplineSchema, PostDisciplineSchema,\
+    Teacher_discipline, CurrentTeacherDisciplineSchema, SuccessSchema, IDParameter, Teacher_discipline
 
 @app.route('/disciplines', methods=['GET'])
 def get_disciplines():
@@ -157,6 +158,9 @@ def delete_cur_discipline(id):
         - Auditorium
     """
     discipline = Discipline.query.filter_by(id = id).first()
+    find_teacher_disciplines = Teacher_discipline.query.filter_by(discipline_id = id).all()
+    for item in find_teacher_disciplines:
+        db.session.delete(item)
     db.session.delete(discipline)
     db.session.commit()
     return {"message": "Success"}
