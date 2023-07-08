@@ -1,6 +1,5 @@
 from app import app, db, spec
 from flask import jsonify, request
-from marshmallow import Schema, fields
 from app.models import Teacher, TeacherSchema, PostTeacherSchema, CurrentTeacherSchema, PreferenceSchema, Teacher_preference, Teacher_discipline, CurrentDisciplineTeacherSchema,  SuccessSchema, IDParameter
 
 

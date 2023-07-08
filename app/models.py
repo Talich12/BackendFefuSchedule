@@ -110,7 +110,7 @@ class CurrentDisciplineSchema(ma.SQLAlchemySchema):
     name = auto_field()
     reporting_form = auto_field()
 
-    teachers_array = fields.List(fields.Nested(lambda: CurrentTeacherDisciplineSchema()))
+    teachers = fields.List(fields.Nested(lambda: CurrentTeacherDisciplineSchema()))
 
 class PostDisciplineSchema(ma.SQLAlchemySchema):
     class Meta:
@@ -229,8 +229,8 @@ class CurrentTeacherSchema(ma.SQLAlchemySchema):
     lastname = auto_field()
     position = auto_field()
 
-    discioline_schema =  fields.List(fields.Nested(lambda: DisciplineSchema()))
-    preference_array = fields.List(fields.Nested(lambda: PreferenceSchema()))
+    disciplines = fields.List(fields.Nested(lambda: DisciplineSchema()))
+    preferences = fields.List(fields.Nested(lambda: PreferenceSchema()))
 
 class PostTeacherSchema(ma.SQLAlchemySchema):
     class Meta:
