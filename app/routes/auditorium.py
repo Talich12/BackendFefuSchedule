@@ -94,7 +94,7 @@ with app.test_request_context():
     spec.path(view=get_cur_auditorium)
 
 
-@app.route('/auditoriums/<number>', methods=['POST'])
+@app.route('/auditoriums/<number_id>', methods=['POST'])
 def edit_cur_auditorium(number_id):
     """Auditoriums API.
     ---
