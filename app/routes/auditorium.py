@@ -1,7 +1,7 @@
 from app import app, db, spec
 from flask import jsonify, request
 from marshmallow import Schema, fields
-from app.models import Auditorium, AuditoriumSchema, SuccessSchema, IDParameter
+from app.models import Auditorium, AuditoriumSchema, SuccessSchema, NumberParameter
 
 @app.route('/auditoriums', methods=['GET'])
 def get_auditoriums():
@@ -66,15 +66,15 @@ def post_auditoriums():
 with app.test_request_context():
     spec.path(view=post_auditoriums)
 
-@app.route('/auditoriums/<id>', methods=['GET'])
-def get_cur_auditorium(id):
+@app.route('/auditoriums/<number>', methods=['GET'])
+def get_cur_auditorium(number):
     """Auditoriums API.
     ---
     get:
       description: Get auditorium by id
       parameters:
       - in: path
-        schema: IDParameter
+        schema: NumberParameter
       responses:
         200:
           description: Return teacher
@@ -86,7 +86,7 @@ def get_cur_auditorium(id):
     """
     auditorium_schema = AuditoriumSchema(many = False)
 
-    req = Auditorium.query.filter_by(id = id).first()
+    req = Auditorium.query.filter_by(number = number).first()
     output = auditorium_schema.dump(req)
     return jsonify(output)
 
@@ -94,15 +94,15 @@ with app.test_request_context():
     spec.path(view=get_cur_auditorium)
 
 
-@app.route('/auditoriums/<id>', methods=['POST'])
-def edit_cur_auditorium(id):
+@app.route('/auditoriums/<number>', methods=['POST'])
+def edit_cur_auditorium(number_id):
     """Auditoriums API.
     ---
     post:
       description: Edit a auditorium
       parameters:
       - in: path
-        schema: IDParameter
+        schema: NumberParameter
       requestBody:
         description: Request data for auditorium
         required: true
@@ -125,7 +125,7 @@ def edit_cur_auditorium(id):
     type = data['type']
     number_of_seats = data['number_of_seats']
 
-    auditorium = Auditorium.query.filter_by(id = id).first()
+    auditorium = Auditorium.query.filter_by(number = number_id).first()
     auditorium.number = number
     auditorium.type = type
     auditorium.number_of_seats = number_of_seats
@@ -136,15 +136,15 @@ def edit_cur_auditorium(id):
 with app.test_request_context():
     spec.path(view=edit_cur_auditorium)
 
-@app.route('/auditoriums/<id>', methods=['DELETE'])
-def delete_cur_auditorium(id):
+@app.route('/auditoriums/<number>', methods=['DELETE'])
+def delete_cur_auditorium(number):
     """Auditoriums API.
     ---
     delete:
       description: Get auditorium by id
       parameters:
       - in: path
-        schema: IDParameter
+        schema: NumberParameter
       responses:
         200:
           description: Return teacher
@@ -154,7 +154,7 @@ def delete_cur_auditorium(id):
       tags:
         - Auditorium
     """
-    auditorium = Auditorium.query.filter_by(id = id).first()
+    auditorium = Auditorium.query.filter_by(number = number).first()
     db.session.delete(auditorium)
     db.session.commit()
     return {"message": "Success"}

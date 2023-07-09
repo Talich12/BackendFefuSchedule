@@ -207,7 +207,6 @@ class PostGroupSchema(ma.SQLAlchemySchema):
     name = auto_field() 
     flow_id = auto_field()
 
-    flow = fields.Nested(FlowSchema)  
 
 class SubgroupSchema(ma.SQLAlchemySchema):
     class Meta:
@@ -229,8 +228,6 @@ class PostSubgroupSchema(ma.SQLAlchemySchema):
     number = auto_field()
     size = auto_field()  
     group_id = auto_field()
-
-    group = fields.Nested(GroupSchema)
 
 class TeacherSchema(ma.SQLAlchemySchema):
     class Meta:
@@ -346,3 +343,6 @@ class SuccessSchema(Schema):
 
 class IDParameter(Schema):
     id = fields.Int()
+
+class NumberParameter(Schema):
+    number = fields.Int()
