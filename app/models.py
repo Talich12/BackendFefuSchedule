@@ -299,8 +299,6 @@ class Teacher_disciplineSchema(ma.SQLAlchemySchema):
         load_instance = True
 
     id = auto_field(required=True)
-    discipline_id = auto_field()
-    teacher_id = auto_field()
 
     discipline = fields.Nested(DisciplineSchema)
     teacher = fields.Nested(TeacherSchema)
