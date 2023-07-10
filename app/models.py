@@ -55,14 +55,14 @@ class Teacher(db.Model):
 class Teacher_preference(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     preference = db.Column(db.String(), nullable=False)
-    teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id'), nullable=False)
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id', ondelete="CASCADE"), nullable=False)
     teacher = db.relationship("Teacher", backref="preference")
 
 class Teacher_discipline(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id'), nullable=False)
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id', ondelete="CASCADE"), nullable=False)
     teacher = db.relationship("Teacher", backref="teacher_discipline")
-    discipline_id = db.Column(db.Integer, db.ForeignKey('discipline.id'), nullable=False)
+    discipline_id = db.Column(db.Integer, db.ForeignKey('discipline.id', ondelete="CASCADE"), nullable=False)
     discipline = db.relationship("Discipline", backref="teacher_discipline")
 
 class Discipline(db.Model):
