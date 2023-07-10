@@ -1,14 +1,17 @@
 from app import app, db, spec
 from flask import jsonify, request
 from marshmallow import Schema, fields
-from app.models import Flow, Group, Subgroup, SubgroupSchema, PostSubgroupSchema, SuccessSchema, IDParameter
+from app.models import Flow, Group, Subgroup, SubgroupSchema, PostSubgroupSchema, SuccessSchema, IDParameter, GroupIDParameter, DeleteSubgroupSchema
 
-@app.route('/subgroups', methods=['GET'])
-def get_pair_subgroups():
+@app.route('/subgroups/<group_id>', methods=['GET'])
+def get_pair_subgroups(group_id):
     """Discipline API.
     ---
     get:
       description: Get all discipline
+      parameters:
+      - in: path
+        schema: GroupIDParameter
       responses:
         200:
           description: Return all discipline
@@ -21,7 +24,7 @@ def get_pair_subgroups():
         - Discipline
     """
     subgroup_schema = SubgroupSchema(many = True)
-    req = Subgroup.query.all()
+    req = Subgroup.query.filter_by(group_id = group_id).all()
     output = subgroup_schema.dump(req)
     return jsonify(output)
 
@@ -29,12 +32,15 @@ with app.test_request_context():
     spec.path(view=get_pair_subgroups)
 
 
-@app.route('/subgroups', methods=['POST'])
-def post_pair_subgroups():
+@app.route('/subgroups/<group_id>', methods=['POST'])
+def post_pair_subgroups(group_id):
     """Discipline API
     ---
     post:
       description: Create a discipline
+      parameters:
+      - in: path
+        schema: GroupIDParameter
       requestBody:
         description: Request data for discipline
         required: true
@@ -55,7 +61,6 @@ def post_pair_subgroups():
     data = request.get_json(silent=True)
     number = data['number']
     size = data['size']
-    group_id = data['group_id']
 
     find_group = Group.query.filter_by(id = group_id).first()
     find_group.size += size
@@ -100,80 +105,18 @@ with app.test_request_context():
     spec.path(view=get_cur_subgroup)
 
 
-@app.route('/subgroups/<id>', methods=['POST'])
-def edit_cur_subgroup(id):
-    """Discipline API.
-    ---
-    post:
-      description: Edit a auditorium
-      parameters:
-      - in: path
-        schema: IDParameter
-      requestBody:
-        description: Request data for auditorium
-        required: true
-        content:
-          application/json:
-            schema: PostSubgroupSchema
-      security:
-        - ApiKeyAuth: []
-      responses:
-        200:
-          description: If discipline is edited
-          content:
-            application/json:
-              schema: SuccessSchema
-      tags:
-        - Discipline
-    """
-    data = request.get_json(silent=True)
-    number = data['number']
-    size = data['size']
-    group_id = data['group_id']
-
-    changed = False
-
-
-
-    subgroup = Subgroup.query.filter_by(id = id).first()
-
-    if group_id != subgroup.group_id:
-        old_group = Group.query.filter_by(id = subgroup.group_id).first()
-        old_group.size -= subgroup.size
-        old_flow = Flow.query.filter_by(id = old_group.flow_id).first()
-        old_flow.size -= subgroup.size
-        changed = True
-
-    if changed:
-        new_group = Group.query.filter_by(id = group_id).first()
-        new_group.size += size
-        new_flow = Flow.query.filter_by(id = new_group.flow_id).first()
-        new_flow.size += size
-    else:
-        new_group = Group.query.filter_by(id = group_id).first()
-        new_group.size += size - subgroup.size
-        new_flow = Flow.query.filter_by(id = new_group.flow_id).first()
-        new_flow.size += size - subgroup.size
-    
-    subgroup.number = number
-    subgroup.size = size
-    subgroup.group_id = group_id
-    db.session.commit()
-
-    return {"message": "Success"}
-
-with app.test_request_context():
-    spec.path(view=edit_cur_subgroup)
-
-@app.route('/subgroups/<id>', methods=['DELETE'])
-def delete_cur_subgroup(id):
+@app.route('/subgroups', methods=['DELETE'])
+def delete_cur_subgroup():
     """Discipline API.
     ---
     delete:
       description: Get discipline by id
-      parameters:
-      - in: path
-        schema: IDParameter
+      requestBody:
+        description: Request data for discipline
+        required: true
+        content:
+          application/json:
+            schema: DeleteSubgroupSchema
       responses:
         200:
           description: Return discipline
@@ -183,7 +126,11 @@ def delete_cur_subgroup(id):
       tags:
         - Discipline
     """
-    subgroup = Subgroup.query.filter_by(id = id).first()
+    data = request.get_json(silent=True)
+    group_id = data['group_id']
+    subgroup_id = data['subgroup_id']
+
+    subgroup = Subgroup.query.filter_by(id = subgroup_id, group_id = group_id).first()
     db.session.delete(subgroup)
     db.session.commit()
     return {"message": "Success"}

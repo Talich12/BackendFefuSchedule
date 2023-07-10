@@ -205,7 +205,10 @@ class PostGroupSchema(ma.SQLAlchemySchema):
         load_instance = True
 
     name = auto_field() 
-    flow_id = auto_field()
+
+class DeleteGroupSchema(ma.SQLAlchemySchema):
+    flow_id = fields.Int()
+    group_id = fields.Int()
 
 
 class SubgroupSchema(ma.SQLAlchemySchema):
@@ -228,6 +231,11 @@ class PostSubgroupSchema(ma.SQLAlchemySchema):
     number = auto_field()
     size = auto_field()  
     group_id = auto_field()
+
+class DeleteSubgroupSchema(ma.SQLAlchemySchema):
+    subgroup_id = fields.Int()
+    group_id = fields.Int()
+
 
 class TeacherSchema(ma.SQLAlchemySchema):
     class Meta:
@@ -341,6 +349,12 @@ class SuccessSchema(Schema):
 
 class IDParameter(Schema):
     id = fields.Int()
+
+class FlowIDParameter(Schema):
+    flow_id = fields.Int()
+
+class GroupIDParameter(Schema):
+    group_id = fields.Int()
 
 class NumberParameter(Schema):
     number = fields.String()
