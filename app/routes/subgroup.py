@@ -130,7 +130,14 @@ def delete_cur_subgroup():
     group_id = data['group_id']
     subgroup_id = data['subgroup_id']
 
-    subgroup = Subgroup.query.filter_by(id = subgroup_id, group_id = group_id).first()
+    subgroup = Subgroup.query.filter_by(id = subgroup_id, group_id = group_id).first() 
+
+    find_group = Group.query.filter_by(id = group_id).first()
+    find_group.size -= subgroup.size
+
+    find_flow = Flow.query.filter_by(id = find_group.flow_id).first()
+    find_flow.size -= subgroup.size
+    
     db.session.delete(subgroup)
     db.session.commit()
     return {"message": "Success"}

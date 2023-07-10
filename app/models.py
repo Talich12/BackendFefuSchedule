@@ -194,10 +194,10 @@ class GroupSchema(ma.SQLAlchemySchema):
 
     id = auto_field(required=True)
     name = auto_field()
-    size = auto_field()  
-    flow_id = auto_field()
+    size = auto_field()
 
-    flow = fields.Nested(FlowSchema)
+    subgroups = fields.List(fields.Nested(lambda: SubgroupSchema()))
+    
 
 class PostGroupSchema(ma.SQLAlchemySchema):
     class Meta:
@@ -219,9 +219,6 @@ class SubgroupSchema(ma.SQLAlchemySchema):
     id = auto_field(required=True)
     number = auto_field()
     size = auto_field()  
-    group_id = auto_field()
-
-    group = fields.Nested(GroupSchema)
 
 class PostSubgroupSchema(ma.SQLAlchemySchema):
     class Meta:
