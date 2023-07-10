@@ -20,7 +20,7 @@ class Work_plan(db.Model):
 
 class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    auditorium_number = db.Column(db.Integer, db.ForeignKey('auditorium.number'), nullable=False)
+    auditorium_number = db.Column(db.String(), db.ForeignKey('auditorium.number'), nullable=False)
     auditorium = db.relationship("Auditorium", backref="shedule")
     pair_number_id = db.Column(db.Integer, db.ForeignKey('pair_number.id'), nullable=False)
     pair_number = db.relationship("Pair_number", backref="shedule")
@@ -29,6 +29,7 @@ class Schedule(db.Model):
     teacher_discipline_id = db.Column(db.Integer, db.ForeignKey('teacher_discipline.id'), nullable=False)
     teacher_discipline = db.relationship("Teacher_discipline", backref="shedule")
     day_of_week = db.Column(db.Integer, nullable=False) # от 0 до 6
+    is_even = db.Column(db.Boolean , default = False)
 
 
 class Auditorium(db.Model):
@@ -344,6 +345,45 @@ class PostTeacher_disciplineSchema(ma.SQLAlchemySchema):
     discipline_id = auto_field()
     teacher_id = auto_field()
 
+class ScheduleShcema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Schedule
+        load_instance = True
+
+    id = auto_field()
+    auditorium = fields.Nested(AuditoriumSchema)
+    pair_number = fields.Nested(Pair_numberSchema)
+    subgroup = fields.Nested(SubgroupSchema)
+    day_of_week = auto_field()
+    is_even = auto_field()
+    teacher_discipline = fields.Nested(Teacher_disciplineSchema)
+
+class PostScheduleShcema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Schedule
+        load_instance = True
+
+    id = auto_field()
+    auditorium_number = auto_field()
+    pair_number_id = auto_field()
+    subgroup_id = auto_field()
+    teacher_discipline_id = auto_field()
+    day_of_week = auto_field()
+    is_even = auto_field()
+
+class DayOfWeekSchema(Schema):
+    monday = fields.List(fields.Nested(lambda: ScheduleShcema()))
+    tuesday = fields.List(fields.Nested(lambda: ScheduleShcema()))
+    wednesday = fields.List(fields.Nested(lambda: ScheduleShcema()))
+    thursday = fields.List(fields.Nested(lambda: ScheduleShcema()))
+    friday = fields.List(fields.Nested(lambda: ScheduleShcema()))
+    saturday = fields.List(fields.Nested(lambda: ScheduleShcema()))
+    sunday = fields.List(fields.Nested(lambda: ScheduleShcema()))
+
+class AllScheduleSchema(Schema):
+    even = fields.Nested(DayOfWeekSchema)
+    odd = fields.Nested(DayOfWeekSchema)
+    
 class SuccessSchema(Schema):
     message = fields.Str(default='Success')
 
