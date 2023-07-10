@@ -275,7 +275,6 @@ class Teacher_preferenceSchema(ma.SQLAlchemySchema):
 
     id = auto_field(required=True)
     preference = auto_field()
-    teacher_id = auto_field()
 
     teacher = fields.Nested(TeacherSchema)
 
@@ -294,8 +293,6 @@ class PostTeacher_preferenceSchema(ma.SQLAlchemySchema):
 
     preference = auto_field()
     teacher_id = auto_field()
-
-    teacher = fields.Nested(TeacherSchema)
 
 class Teacher_disciplineSchema(ma.SQLAlchemySchema):
     class Meta:
@@ -345,6 +342,9 @@ class SuccessSchema(Schema):
 
 class IDParameter(Schema):
     id = fields.Int()
+
+class TeacherIDParameter(Schema):
+    teacher_id = fields.Int()
 
 class FlowIDParameter(Schema):
     flow_id = fields.Int()
