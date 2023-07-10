@@ -49,7 +49,6 @@ def get_schedule(subgroup_id):
 
     req = Schedule.query.filter_by(subgroup_id = subgroup_id).all()
     schedule = schedule_schema.dump(req)
-    print(schedule)
 
     for pair in schedule:
         if pair['is_even'] == True:
