@@ -38,11 +38,11 @@ def post_pair_groups(flow_id):
     ---
     post:
       description: Create a discipline
+      parameters:
+      - in: path
+        schema: FlowIDParameter
       requestBody:
         description: Request data for discipline
-        parameters:
-        - in: path
-          schema: FlowIDParameter
         required: true
         content:
           application/json:

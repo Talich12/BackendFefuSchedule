@@ -226,8 +226,7 @@ class PostSubgroupSchema(ma.SQLAlchemySchema):
         load_instance = True
 
     number = auto_field()
-    size = auto_field()  
-    group_id = auto_field()
+    size = auto_field()
 
 class DeleteSubgroupSchema(ma.SQLAlchemySchema):
     subgroup_id = fields.Int()
