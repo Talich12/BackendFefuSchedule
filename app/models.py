@@ -343,4 +343,4 @@ class IDParameter(Schema):
     id = fields.Int()
 
 class NumberParameter(Schema):
-    number = fields.Int()
+    number = fields.String()
