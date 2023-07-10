@@ -292,7 +292,14 @@ class PostTeacher_preferenceSchema(ma.SQLAlchemySchema):
         load_instance = True
 
     preference = auto_field()
-    teacher_id = auto_field()
+
+class DeleteTeacher_preferenceSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Teacher_preference
+        load_instance = True
+
+    preference_id = fields.Int()
+    teacher_id = fields.Int()
 
 class Teacher_disciplineSchema(ma.SQLAlchemySchema):
     class Meta:

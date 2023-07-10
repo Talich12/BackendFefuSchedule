@@ -1,7 +1,7 @@
 from app import app, db, spec
 from flask import jsonify, request
 from marshmallow import Schema, fields
-from app.models import Teacher_preference, Teacher_preferenceSchema, PostTeacher_preferenceSchema, SuccessSchema, IDParameter, TeacherIDParameter
+from app.models import Teacher_preference, Teacher_preferenceSchema, PostTeacher_preferenceSchema, SuccessSchema, IDParameter, TeacherIDParameter, DeleteTeacher_preferenceSchema
 
 @app.route('/teacher-preferences/<teacher_id>', methods=['GET'])
 def get_pair_teacher_preferences(teacher_id):
@@ -80,6 +80,12 @@ def delete_cur_teacher_preferences():
       parameters:
       - in: path
         schema: IDParameter
+      requestBody:
+        description: Request data for discipline
+        required: true
+        content:
+          application/json:
+            schema: DeleteTeacher_preferenceSchema
       responses:
         200:
           description: Return discipline
