@@ -105,18 +105,15 @@ with app.test_request_context():
     spec.path(view=get_cur_subgroup)
 
 
-@app.route('/subgroups', methods=['DELETE'])
-def delete_cur_subgroup():
+@app.route('/subgroups/<subgroup_id>/group/<group_id>', methods=['DELETE'])
+def delete_cur_subgroup(subgroup_id, group_id):
     """Discipline API.
     ---
     delete:
       description: Get discipline by id
-      requestBody:
-        description: Request data for discipline
-        required: true
-        content:
-          application/json:
-            schema: DeleteSubgroupSchema
+      parameters:
+      - in: path
+        schema: DeleteSubgroupSchema
       responses:
         200:
           description: Return discipline
@@ -127,8 +124,6 @@ def delete_cur_subgroup():
         - Discipline
     """
     data = request.get_json(silent=True)
-    group_id = data['group_id']
-    subgroup_id = data['subgroup_id']
 
     subgroup = Subgroup.query.filter_by(id = subgroup_id, group_id = group_id).first() 
 

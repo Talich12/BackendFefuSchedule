@@ -1,7 +1,7 @@
 from app import app, db, spec
 from flask import jsonify, request
 from marshmallow import Schema, fields
-from app.models import Schedule, AllScheduleSchema, DayOfWeekSchema, ScheduleShcema, PostScheduleShcema
+from app.models import Schedule, AllScheduleSchema, DayOfWeekSchema, ScheduleShcema, PostScheduleShcema, SheduleIDParameter, Work_plan, WorkPlanSchema
 
 @app.route('/schedule/<subgroup_id>', methods=['GET'])
 def get_schedule(subgroup_id):
@@ -11,7 +11,7 @@ def get_schedule(subgroup_id):
       description: Get all discipline
       parameters:
       - in: path
-        schema: TeacherIDParameter
+        schema: SheduleIDParameter
       responses:
         200:
           description: Return all discipline
@@ -46,9 +46,29 @@ def get_schedule(subgroup_id):
         }
     }
     schedule_schema = ScheduleShcema(many = True)
+    work_plan_schema = WorkPlanSchema(many = True)
+    disciplines = []
+    flag = False
 
     req = Schedule.query.filter_by(subgroup_id = subgroup_id).all()
+    work_plan = Work_plan.query.filter_by(subgroup_id = subgroup_id).all()
+
+    work_plan = work_plan_schema.dump(work_plan)
     schedule = schedule_schema.dump(req)
+
+    print(work_plan)
+    print(schedule)
+
+    for discipline in work_plan:
+        for pair in schedule:
+          if discipline['discipline']['id'] == pair["teacher_discipline"]['discipline']["id"]:
+            flag = True
+            break
+      
+        if flag == False:
+            disciplines.append(discipline)
+        flag = False
+          
 
     for pair in schedule:
         if pair['is_even'] == True:
@@ -88,6 +108,7 @@ def get_schedule(subgroup_id):
         if pair['day_of_week'] == 6:
             output["odd"]["sunday"].append(pair)
 
+    output['disciplines'] = disciplines
     return jsonify(output)
 
 with app.test_request_context():

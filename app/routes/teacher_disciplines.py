@@ -67,18 +67,15 @@ with app.test_request_context():
     spec.path(view=post_teachers_disciplines)
 
 
-@app.route('/teachers-disciplines', methods=['DELETE'])
-def delete_cur_teachers_discipline():
+@app.route('/teachers/<teacher_id>/disciplines/<discipline_id>', methods=['DELETE'])
+def delete_cur_teachers_discipline(teacher_id, discipline_id):
     """Teachers API.
     ---
     delete:
       description: Get teacher by id
-      requestBody:
-        description: Request data for teacher
-        required: true
-        content:
-          application/json:
-            schema: PostTeacher_disciplineSchema
+      parameters:
+      - in: path
+        schema: PostTeacher_disciplineSchema
       responses:
         200:
           description: Return teacher
@@ -88,9 +85,6 @@ def delete_cur_teachers_discipline():
       tags:
         - Teacher
     """
-    data = request.get_json(silent=True)
-    teacher_id = data['teacher_id']
-    discipline_id = data['discipline_id']
     teacher_discipline = Teacher_discipline.query.filter_by(teacher_id= teacher_id, discipline_id = discipline_id).first()
     db.session.delete(teacher_discipline)
     db.session.commit()

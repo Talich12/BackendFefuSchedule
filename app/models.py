@@ -11,22 +11,21 @@ import os
 
 class Work_plan(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    discipline_id = db.Column(db.Integer, db.ForeignKey('discipline.id'), nullable=False)
+    discipline_id = db.Column(db.Integer, db.ForeignKey('discipline.id', ondelete="CASCADE"), nullable=False)
     discipline = db.relationship("Discipline", backref="work_plan")
-    subgroup_id = db.Column(db.Integer, db.ForeignKey('subgroup.id'), nullable=False)
+    subgroup_id = db.Column(db.Integer, db.ForeignKey('subgroup.id', ondelete="CASCADE"), nullable=False)
     subgroup = db.relationship("Subgroup", backref="work_plan")
-    hour_count = db.Column(db.Integer, nullable=False)
 
 
 class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    auditorium_number = db.Column(db.String(), db.ForeignKey('auditorium.number'), nullable=False)
+    auditorium_number = db.Column(db.String(), db.ForeignKey('auditorium.number', ondelete="CASCADE"), nullable=False)
     auditorium = db.relationship("Auditorium", backref="shedule")
-    pair_number_id = db.Column(db.Integer, db.ForeignKey('pair_number.id'), nullable=False)
+    pair_number_id = db.Column(db.Integer, db.ForeignKey('pair_number.id', ondelete="CASCADE"), nullable=False)
     pair_number = db.relationship("Pair_number", backref="shedule")
-    subgroup_id = db.Column(db.Integer, db.ForeignKey('subgroup.id'), nullable=False)
+    subgroup_id = db.Column(db.Integer, db.ForeignKey('subgroup.id', ondelete="CASCADE"), nullable=False)
     subgroup = db.relationship("Subgroup", backref="shedule")
-    teacher_discipline_id = db.Column(db.Integer, db.ForeignKey('teacher_discipline.id'), nullable=False)
+    teacher_discipline_id = db.Column(db.Integer, db.ForeignKey('teacher_discipline.id', ondelete="CASCADE"), nullable=False)
     teacher_discipline = db.relationship("Teacher_discipline", backref="shedule")
     day_of_week = db.Column(db.Integer, nullable=False) # от 0 до 6
     is_even = db.Column(db.Boolean , default = False)
@@ -383,7 +382,28 @@ class DayOfWeekSchema(Schema):
 class AllScheduleSchema(Schema):
     even = fields.Nested(DayOfWeekSchema)
     odd = fields.Nested(DayOfWeekSchema)
+    disciplines = fields.List(fields.Nested(lambda: DisciplineSchema()))
     
+class WorkPlanSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Work_plan
+        load_instance = True
+
+    discipline = fields.Nested(DisciplineSchema)
+
+class AllWorkPlanSchema(Schema):
+
+    disciplines = fields.List(fields.Nested(lambda: DisciplineSchema()))
+
+
+class PostWorkPlanSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Work_plan
+        load_instance = True
+
+    subgroup_id = auto_field()
+    discipline_id = auto_field()
+
 class SuccessSchema(Schema):
     message = fields.Str(default='Success')
 
@@ -392,6 +412,9 @@ class IDParameter(Schema):
 
 class TeacherIDParameter(Schema):
     teacher_id = fields.Int()
+
+class SheduleIDParameter(Schema):
+    subgroup_id = fields.Int()
 
 class FlowIDParameter(Schema):
     flow_id = fields.Int()

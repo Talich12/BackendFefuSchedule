@@ -105,18 +105,15 @@ with app.test_request_context():
 
 
 
-@app.route('/groups', methods=['DELETE'])
-def delete_cur_group():
+@app.route('/groups/<group_id>/flow/<flow_id>', methods=['DELETE'])
+def delete_cur_group(group_id, flow_id):
     """Discipline API.
     ---
     delete:
       description: Get discipline by id
-      requestBody:
-        description: Request data for auditorium
-        required: true
-        content:
-          application/json:
-            schema: DeleteGroupSchema
+      parameters:
+      - in: path
+        schema: DeleteGroupSchema
       responses:
         200:
           description: Return discipline
@@ -127,8 +124,6 @@ def delete_cur_group():
         - Discipline
     """
     data = request.get_json(silent=True)
-    flow_id = data['flow_id']
-    group_id = data['group_id']
 
     group = Group.query.filter_by(flow_id = flow_id, id = group_id).first()
 

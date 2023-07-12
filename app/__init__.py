@@ -36,7 +36,7 @@ api_key_scheme = {"type": "apiKey", "in": "header", "name": "X-API-Key"}
 spec.components.security_scheme("ApiKeyAuth", api_key_scheme)
 
 from app import models
-from app.routes import teacher, auditorium, discipline, pair_number, flow, group, subgroup, teacher_preference, teacher_disciplines, schedule
+from app.routes import teacher, auditorium, discipline, pair_number, flow, group, subgroup, teacher_preference, teacher_disciplines, schedule, work_plan
 
 @app.route("/swagger")
 def swagger():

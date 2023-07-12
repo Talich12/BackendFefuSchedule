@@ -71,21 +71,15 @@ with app.test_request_context():
     spec.path(view=post_pair_teacher_preferences)
 
 
-@app.route('/teacher-preferences', methods=['DELETE'])
-def delete_cur_teacher_preferences():
+@app.route('/teacher/<teacher_id>/preferences/<preference_id>', methods=['DELETE'])
+def delete_cur_teacher_preferences(teacher_id, preference_id):
     """Discipline API.
     ---
     delete:
       description: Get discipline by id
       parameters:
       - in: path
-        schema: IDParameter
-      requestBody:
-        description: Request data for discipline
-        required: true
-        content:
-          application/json:
-            schema: DeleteTeacher_preferenceSchema
+        schema: DeleteTeacher_preferenceSchema
       responses:
         200:
           description: Return discipline
@@ -95,9 +89,6 @@ def delete_cur_teacher_preferences():
       tags:
         - Discipline
     """
-    data = request.get_json(silent=True)
-    teacher_id = data['teacher_id']
-    preference_id = data['preference_id']
 
     teacher_preference = Teacher_preference.query.filter_by(id = preference_id, teacher_id = teacher_id).first()
     db.session.delete(teacher_preference)
