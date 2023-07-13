@@ -423,4 +423,4 @@ class GroupIDParameter(Schema):
     group_id = fields.Int()
 
 class NumberParameter(Schema):
-    number = fields.String()
+    number_id = fields.String()

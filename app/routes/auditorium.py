@@ -66,8 +66,8 @@ def post_auditoriums():
 with app.test_request_context():
     spec.path(view=post_auditoriums)
 
-@app.route('/auditoriums/<number>', methods=['GET'])
-def get_cur_auditorium(number):
+@app.route('/auditoriums/<number_id>', methods=['GET'])
+def get_cur_auditorium(number_id):
     """Auditoriums API.
     ---
     get:
@@ -86,7 +86,7 @@ def get_cur_auditorium(number):
     """
     auditorium_schema = AuditoriumSchema(many = False)
 
-    req = Auditorium.query.filter_by(number = number).first()
+    req = Auditorium.query.filter_by(number = number_id).first()
     output = auditorium_schema.dump(req)
     return jsonify(output)
 
@@ -94,8 +94,8 @@ with app.test_request_context():
     spec.path(view=get_cur_auditorium)
 
 
-@app.route('/auditoriums/<number>', methods=['POST'])
-def edit_cur_auditorium(number):
+@app.route('/auditoriums/<number_id>', methods=['POST'])
+def edit_cur_auditorium(number_id):
     """Auditoriums API.
     ---
     post:
@@ -121,12 +121,12 @@ def edit_cur_auditorium(number):
         - Auditorium
     """
     data = request.get_json(silent=True)
-    number_data = data['number_data']
+    number = data['number']
     type = data['type']
     number_of_seats = data['number_of_seats']
 
-    auditorium = Auditorium.query.filter_by(number = number).first()
-    auditorium.number_data = number_data
+    auditorium = Auditorium.query.filter_by(number = number_id).first()
+    auditorium.number = number
     auditorium.type = type
     auditorium.number_of_seats = number_of_seats
     db.session.commit()
@@ -136,8 +136,8 @@ def edit_cur_auditorium(number):
 with app.test_request_context():
     spec.path(view=edit_cur_auditorium)
 
-@app.route('/auditoriums/<number>', methods=['DELETE'])
-def delete_cur_auditorium(number):
+@app.route('/auditoriums/<number_id>', methods=['DELETE'])
+def delete_cur_auditorium(number_id):
     """Auditoriums API.
     ---
     delete:
@@ -154,7 +154,7 @@ def delete_cur_auditorium(number):
       tags:
         - Auditorium
     """
-    auditorium = Auditorium.query.filter_by(number = number).first()
+    auditorium = Auditorium.query.filter_by(number = number_id).first()
     db.session.delete(auditorium)
     db.session.commit()
     return {"message": "Success"}
