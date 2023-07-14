@@ -71,7 +71,7 @@ with app.test_request_context():
 def delete_work_plan(subgroup_id, discipline_id):
     """Discipline API.
     ---
-    get:
+    delete:
       description: Get all discipline
       parameters:
       - in: path
