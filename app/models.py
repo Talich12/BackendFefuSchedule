@@ -361,8 +361,7 @@ class PostScheduleShcema(ma.SQLAlchemySchema):
     class Meta:
         model = Schedule
         load_instance = True
-
-    id = auto_field()
+        
     auditorium_number = auto_field()
     pair_number_id = auto_field()
     subgroup_id = auto_field()
