@@ -17,9 +17,7 @@ def get_schedule(subgroup_id):
           description: Return all discipline
           content:
             application/json:
-              schema: 
-                type: array
-                items: AllScheduleSchema
+              schema: AllScheduleSchema 
       tags:
         - Discipline
     """
