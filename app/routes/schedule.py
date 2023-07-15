@@ -64,7 +64,11 @@ def get_schedule(subgroup_id):
             break
       
         if flag == False:
-            disciplines.append(discipline)
+            disciplines.append({
+                "id": discipline['discipline']["id"],
+                "name": discipline['discipline']["name"],
+                "reporting_form": discipline['discipline']["reporting_form"]
+            })
         flag = False
           
 
