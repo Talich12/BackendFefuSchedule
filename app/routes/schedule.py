@@ -48,7 +48,7 @@ def get_schedule(subgroup_id):
     disciplines = []
     flag = False
 
-    req = Schedule.query.filter_by(subgroup_id = subgroup_id).all()
+    req = Schedule.query.filter_by(subgroup_id = subgroup_id).order_by(Schedule.pair_number_id.asc()).all()
     work_plan = Work_plan.query.filter_by(subgroup_id = subgroup_id).all()
 
     work_plan = work_plan_schema.dump(work_plan)
